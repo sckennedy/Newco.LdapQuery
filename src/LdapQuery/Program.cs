@@ -37,48 +37,21 @@ namespace LdapQuery
 
             foreach (var username in usernames)
             {
-                string[] parts = username.Split(new char[] { '|' });
+                DirectorySearcher searcher = CreateSearcher(directoryEntry, username);
 
-                DirectorySearcher searcher = CreateSearcher(directoryEntry, parts[0], parts[1]);
-
-                var results = searcher.FindAll();
+                var result = searcher.FindOne();
 
                 //if we didn't find anyone then add to the notFound list
-                if (results == null || results.Count == 0)
+                if (result == null)
                 {
                     Console.WriteLine($"{username} not found.");
                     notFound.Add(username);
                 }
                 else
                 {
-                    if (results.Count == 1)
-                    {
-                        //if we just have one result then go with that
-                        var user = User.FromDirectorySearchResult(results[0], username);
-                        lines.Add(user.ToSingleLineString("|"));
-                    }
-                    else
-                    {
-                        var found = false;
-                        foreach (SearchResult result in results)
-                        {
-                            //otherwise loop through each result and try and find one that has a matching first name
-                            var givenName = result.Properties["givenName"][0].ToString();
-                            if (parts[0].ToLower().Contains(givenName.ToLower()) || givenName.ToLower().Contains(parts[0].ToLower()))
-                            {
-                                var user = User.FromDirectorySearchResult(result, username);
-                                lines.Add(user.ToSingleLineString("|"));
-                                Console.WriteLine($"{username} done.");
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found)
-                        {
-                            Console.WriteLine($"{username} not found.");
-                            notFound.Add(username);
-                        }
-                    }                    
+                    var user = User.FromDirectorySearchResult(result, username);
+                    lines.Add(user.ToSingleLineString("|"));
+                    Console.WriteLine($"{username} done.");
                 }
             }
 
@@ -104,12 +77,12 @@ namespace LdapQuery
             return fileName;
         }
 
-        private static DirectorySearcher CreateSearcher(DirectoryEntry directoryEntry, string firstName, string surname)
+        private static DirectorySearcher CreateSearcher(DirectoryEntry directoryEntry, string username)
         {
             var searcher = new DirectorySearcher(directoryEntry)
             {
                 PageSize = int.MaxValue,
-                Filter = $"(&(objectCategory=person)(objectClass=user)(sn={surname}))"
+                Filter = $"(&(objectCategory=person)(objectClass=user)(sAMAccountName={username}))"
             };
 
             searcher.PropertiesToLoad.Add("sAMAccountName");
