@@ -1,0 +1,14 @@
+C:\code\LdapQuery\LdapQuery\bin\Debug\LdapQuery.exe.config
+C:\code\LdapQuery\LdapQuery\bin\Debug\LdapQuery.exe
+C:\code\LdapQuery\LdapQuery\bin\Debug\LdapQuery.pdb
+C:\code\LdapQuery\LdapQuery\obj\Debug\LdapQuery.csprojAssemblyReference.cache
+C:\code\LdapQuery\LdapQuery\obj\Debug\LdapQuery.csproj.CoreCompileInputs.cache
+C:\code\LdapQuery\LdapQuery\obj\Debug\LdapQuery.exe
+C:\code\LdapQuery\LdapQuery\obj\Debug\LdapQuery.pdb
+C:\code\LdapQuery\src\LdapQuery\bin\Debug\LdapQuery.exe.config
+C:\code\LdapQuery\src\LdapQuery\bin\Debug\LdapQuery.exe
+C:\code\LdapQuery\src\LdapQuery\bin\Debug\LdapQuery.pdb
+C:\code\LdapQuery\src\LdapQuery\obj\Debug\LdapQuery.csprojAssemblyReference.cache
+C:\code\LdapQuery\src\LdapQuery\obj\Debug\LdapQuery.csproj.CoreCompileInputs.cache
+C:\code\LdapQuery\src\LdapQuery\obj\Debug\LdapQuery.exe
+C:\code\LdapQuery\src\LdapQuery\obj\Debug\LdapQuery.pdb
