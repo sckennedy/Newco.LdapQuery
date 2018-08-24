@@ -72,7 +72,8 @@ namespace LdapQuery
 
         private static string WriteOutputToFile(List<string> lines, string name)
         {
-            var fileName = $@"{outputFolder}\{name}_{DateTime.Now.Year}_{DateTime.Now.Month}_{DateTime.Now.Day}-{DateTime.Now.ToShortTimeString().Replace(":", "-")}.txt";
+            //create filename based on timestamp of the day
+            var fileName = $@"{outputFolder}\{name}_{DateTime.Now.ToShortDateString().Replace("/", "_")}-{DateTime.Now.ToShortTimeString().Replace(":", "-")}.txt";
             File.WriteAllLines(fileName, lines.ToArray());
             return fileName;
         }
