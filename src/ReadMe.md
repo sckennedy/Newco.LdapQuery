@@ -11,3 +11,4 @@ To run the extract run the following from the command line whilst in the folder 
 ```
 LdapQuery.exe C:\Temp\usernames.txt C:\Temp
 ```
+A file will be created in the output folder listing all of the usernames that were not found during the extract
