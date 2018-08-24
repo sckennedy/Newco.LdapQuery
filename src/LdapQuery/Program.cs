@@ -7,33 +7,33 @@ namespace LdapQuery
 {
     class Program
     {
-        private static string usernamesFile = @"C:\code\usernames.txt";
-        private static string outputFolder = @"C:\code\LdapInfo";
+        private static string _usernamesFile = @"C:\code\usernames.txt";
+        private static string _outputFolder = @"C:\code\LdapInfo";
         static void Main(string[] args)
         {
             if (!string.IsNullOrEmpty(args[0]))
-                usernamesFile = args[0];
+                _usernamesFile = args[0];
 
             if (!string.IsNullOrEmpty(args[1]))
-                outputFolder = args[1];
+                _outputFolder = args[1];
 
             DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://cisco.com");
 
-            if (!File.Exists(usernamesFile))
+            if (!File.Exists(_usernamesFile))
             {
-                Console.WriteLine($"{usernamesFile} does not exist.  Terminating.");
+                Console.WriteLine($"{_usernamesFile} does not exist.  Terminating.");
                 Console.ReadLine();
                 return;
             }
 
-            if (!Directory.Exists(outputFolder))
-                Directory.CreateDirectory(outputFolder);
+            if (!Directory.Exists(_outputFolder))
+                Directory.CreateDirectory(_outputFolder);
 
-            string[] usernames = File.ReadAllLines(usernamesFile);
+            var usernames = File.ReadAllLines(_usernamesFile);
             var lines = new List<string>();
             var notFound = new List<string>();
 
-            lines.Add("Username|FirstName|Initials|LastName|PhoneNumber|Mobile|Title|Department|Manager|Email|DeskNumber|Building|Street|City|State|Country");
+            lines.Add("Username|FirstName|Initials|LastName|PhoneNumber|Mobile|Title|Department|Manager|Email|DeskNumber|Building|Street|City|State|PostCode|Country");
 
             foreach (var username in usernames)
             {
@@ -73,7 +73,7 @@ namespace LdapQuery
         private static string WriteOutputToFile(List<string> lines, string name)
         {
             //create filename based on timestamp of the day
-            var fileName = $@"{outputFolder}\{name}_{DateTime.Now.ToShortDateString().Replace("/", "_")}-{DateTime.Now.ToShortTimeString().Replace(":", "-")}.txt";
+            var fileName = $@"{_outputFolder}\{name}_{DateTime.Now.ToShortDateString().Replace("/", "_")}-{DateTime.Now.ToShortTimeString().Replace(":", "-")}.txt";
             File.WriteAllLines(fileName, lines.ToArray());
             return fileName;
         }
