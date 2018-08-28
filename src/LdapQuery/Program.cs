@@ -17,7 +17,7 @@ namespace LdapQuery
             if (!string.IsNullOrEmpty(args[1]))
                 _outputFolder = args[1];
 
-            DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://cisco.com");
+            var directoryEntry = new DirectoryEntry("LDAP://cisco.com");
 
             if (!File.Exists(_usernamesFile))
             {
@@ -33,7 +33,7 @@ namespace LdapQuery
             var lines = new List<string>();
             var notFound = new List<string>();
 
-            lines.Add("Username|FirstName|Initials|LastName|PhoneNumber|Mobile|Title|Department|Manager|Email|DeskNumber|Building|Street|City|State|PostCode|Country");
+            lines.Add("Username|FirstName|LastName|PhoneNumber|Mobile|Title|Department|Manager|Email|DeskNumber|Building|Street|City|State|PostCode|Country");
 
             foreach (var username in usernames)
             {
@@ -88,7 +88,6 @@ namespace LdapQuery
 
             searcher.PropertiesToLoad.Add("sAMAccountName");
             searcher.PropertiesToLoad.Add("givenName");
-            searcher.PropertiesToLoad.Add("initials");
             searcher.PropertiesToLoad.Add("sn");
             searcher.PropertiesToLoad.Add("telephoneNumber");
             searcher.PropertiesToLoad.Add("mobile");

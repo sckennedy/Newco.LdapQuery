@@ -1,8 +1,9 @@
-﻿using System.DirectoryServices;
+﻿using System;
+using System.DirectoryServices;
 
 namespace LdapQuery
 {
-    class User
+    internal class User
     {
         public string Username { get; set; }
         public string FirstName { get; set; }
@@ -30,7 +31,6 @@ namespace LdapQuery
             {
                 Username = GetProperty(result, "sAMAccountName"),
                 FirstName = GetProperty(result, "givenName"),
-                Initials = GetProperty(result, "initials"),
                 LastName = GetProperty(result, "sn"),
                 TelephoneNumber = GetProperty(result, "telephoneNumber"),
                 Mobile = GetProperty(result, "mobile"),
@@ -67,7 +67,7 @@ namespace LdapQuery
             if (property == "manager" && result.Properties.Contains(property))
             {
                 var mgr = result.Properties[property][0].ToString();
-                var endpoint = mgr.IndexOf(",") - 3;
+                var endpoint = mgr.IndexOf(",", StringComparison.Ordinal) - 3;
                 return mgr.Substring(3, endpoint);
             }
 
