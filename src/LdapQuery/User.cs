@@ -57,7 +57,7 @@ namespace LdapQuery
             if (!string.IsNullOrEmpty(delimeter))
                 d = delimeter;
 
-            return $"{Username}{d}{FirstName}{d}{Initials}{d}{LastName}{d}{TelephoneNumber}{d}" +
+            return $"{Username}{d}{FirstName}{d}{LastName}{d}{TelephoneNumber}{d}" +
                 $"{Mobile}{d}{Title}{d}{Department}{d}{Manager}" +
                 $"{d}{Email}{d}{Office}{d}{PoBox}{d}{Street}{d}{City}{d}{State}{d}{PostCode}{d}{Country}";
         }
