@@ -7,51 +7,41 @@ namespace LdapQuery
 {
     class Program
     {
-        private static string _usernamesFile = @"C:\code\usernames.txt";
         private static string _outputFolder = @"C:\code\LdapInfo";
         static void Main(string[] args)
         {
-            if (!string.IsNullOrEmpty(args[0]))
-                _usernamesFile = args[0];
-
             if (!string.IsNullOrEmpty(args[1]))
                 _outputFolder = args[1];
 
-            var directoryEntry = new DirectoryEntry("LDAP://cisco.com");
-
-            if (!File.Exists(_usernamesFile))
-            {
-                Console.WriteLine($"{_usernamesFile} does not exist.  Terminating.");
-                Console.ReadLine();
-                return;
-            }
+            var directoryEntry = new DirectoryEntry("LDAP://cisco.com/DC=cisco,DC=com", @"simkenne@cisco.com", "C0ntr4ct0r!!");
 
             if (!Directory.Exists(_outputFolder))
                 Directory.CreateDirectory(_outputFolder);
 
-            var usernames = File.ReadAllLines(_usernamesFile);
             var lines = new List<string>();
             var notFound = new List<string>();
 
             lines.Add("Username|FirstName|LastName|PhoneNumber|Mobile|Title|Department|Manager|Email|DeskNumber|Building|Street|City|State|PostCode|Country");
 
-            foreach (var username in usernames)
+            DirectorySearcher searcher = CreateSearcher(directoryEntry);
+            SearchResultCollection results = searcher.FindAll();
+            
+            foreach (SearchResult result in results)
             {
-                DirectorySearcher searcher = CreateSearcher(directoryEntry, username);
-
-                var result = searcher.FindOne();
-
                 //if we didn't find anyone then add to the notFound list
-                if (result == null)
+                if (result != null)
                 {
-                    Console.WriteLine($"{username} not found.");
-                    notFound.Add(username);
-                }
-                else
-                {
-                    var user = User.FromDirectorySearchResult(result, username);
-                    lines.Add(user.ToSingleLineString("|"));
-                    Console.WriteLine($"{username} done.");
+                    var user = User.FromDirectorySearchResult(result);
+                    if (user.FirstName != "Not Found" 
+                        && user.FirstName != "Generic" 
+                        && user.FirstName != "Admin" 
+                        && !user.Username.StartsWith("CONF") 
+                        && !user.Username.StartsWith("MCU")
+                        && !user.Username.StartsWith("CTS_"))
+                    {
+                        lines.Add(user.ToSingleLineString("|"));
+                        Console.WriteLine($"{user.Username} done.");
+                    }
                 }
             }
 
@@ -78,12 +68,12 @@ namespace LdapQuery
             return fileName;
         }
 
-        private static DirectorySearcher CreateSearcher(DirectoryEntry directoryEntry, string username)
+        private static DirectorySearcher CreateSearcher(DirectoryEntry directoryEntry)
         {
             var searcher = new DirectorySearcher(directoryEntry)
             {
                 PageSize = int.MaxValue,
-                Filter = $"(&(objectCategory=person)(objectClass=user)(sAMAccountName={username}))"
+                Filter = $"(&(objectCategory=person)(objectClass=user))"
             };
 
             searcher.PropertiesToLoad.Add("sAMAccountName");

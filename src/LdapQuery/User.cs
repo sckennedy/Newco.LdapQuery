@@ -16,7 +16,6 @@ namespace LdapQuery
         public string Department { get; set; }
         public string Manager { get; set; }
         public string Email { get; set; }
-        public string SearchedText { get; set; }
         public string Name { get; set; }
         public string Street { get; set; }
         public string PoBox { get; set; }
@@ -25,7 +24,7 @@ namespace LdapQuery
         public string PostCode { get; set;}
         public string Country { get; set; }
 
-        public static User FromDirectorySearchResult(SearchResult result, string username)
+        public static User FromDirectorySearchResult(SearchResult result)
         {
             return new User
             {
@@ -39,7 +38,6 @@ namespace LdapQuery
                 Department = GetProperty(result, "department"),
                 Manager = GetProperty(result, "manager"),
                 Email = GetProperty(result, "mail"),
-                SearchedText = username,
                 Name = GetProperty(result, "name"),
                 Street = GetProperty(result, "streetAddress"),
                 PoBox = GetProperty(result, "postOfficeBox"),
